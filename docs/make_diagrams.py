@@ -80,14 +80,14 @@ def btree_example():
 
 
 def file_layout():
-    fig, ax = canvas(10, 2.6)
-    ax.text(5, 2.35, "users.dat  (append-only heap file)", ha="center", fontsize=11, fontweight="bold")
+    fig, ax = canvas(11, 2.6)
+    ax.text(5.5, 2.35, "users.dat  (append-only heap file)", ha="center", fontsize=11, fontweight="bold")
     parts = [("MINIDB01\nmagic", "#EEEEEE", 1.4), ("1 | len | [1,'Asha','Delhi']", C["engine"], 2.6), ("1 | len | [2,'Vik','Mumbai']", C["engine"], 2.6),
              ("0 | len | old version\n(tombstone)", "#FDE7E7", 2.0), ("1 | len | [2,'Vik','Pune']\n(new version)", C["engine"], 2.2)]
     x = 0.1
     for t, c, w in parts:
         box(ax, x, 0.9, w - 0.1, 0.9, t, c, 8); x += w
-    ax.text(5, 0.35, "B-Tree index (users.idx on disk):  1 -> 8   |   2 -> offset of the NEWEST version     flag byte 1 = live, 0 = deleted",
+    ax.text(5.5, 0.35, "B-Tree index (users.idx on disk):  1 -> 8   |   2 -> offset of the NEWEST version     flag byte 1 = live, 0 = deleted",
             ha="center", fontsize=8.5)
     fig.savefig(os.path.join(OUT, "file_layout.png"), dpi=170, bbox_inches="tight"); plt.close(fig)
 
