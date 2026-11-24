@@ -1,0 +1,29 @@
+Loaded 5 customers and 6 orders (synthetic demo data)
+
+PLAN for id=3        : INDEX LOOKUP (B-Tree point search, O(log N))
+PLAN for city=Pune   : FULL TABLE SCAN (read every record, O(N))
+PLAN for id 2..4     : INDEX RANGE SCAN (B-Tree in-order walk, O(log N + k))
+
+--- SELECT * FROM customers WHERE id = 3
+    {'id': 3, 'name': 'Neha Iyer', 'city': 'Pune'}
+
+--- SELECT ... WHERE id BETWEEN 2 AND 4
+    {'id': 2, 'name': 'Vikram Shah', 'city': 'Mumbai'}
+    {'id': 3, 'name': 'Neha Iyer', 'city': 'Pune'}
+    {'id': 4, 'name': 'Rohan Das', 'city': 'Kolkata'}
+
+--- SELECT ... WHERE city = 'Pune'  (full scan)
+    {'id': 3, 'name': 'Neha Iyer', 'city': 'Pune'}
+
+--- UPDATE customers SET city='Goa' WHERE id=3  -> {'id': 3, 'name': 'Neha Iyer', 'city': 'Goa'}
+--- DELETE customers WHERE id=5                 -> True
+--- duplicate PK rejected: customers: primary key 1 already exists
+
+--- JOIN orders x customers  [INDEX NESTED-LOOP JOIN]
+    {'orders.order_id': 101, 'orders.customer_id': 1, 'orders.item': 'Notebook', 'orders.amount': 120.5, 'customers.id': 1, 'customers.name': 'Asha Rao', 'customers.city': 'Delhi'}
+    {'orders.order_id': 102, 'orders.customer_id': 3, 'orders.item': 'Pen Set', 'orders.amount': 80.0, 'customers.id': 3, 'customers.name': 'Neha Iyer', 'customers.city': 'Goa'}
+    {'orders.order_id': 103, 'orders.customer_id': 2, 'orders.item': 'Backpack', 'orders.amount': 1450.0, 'customers.id': 2, 'customers.name': 'Vikram Shah', 'customers.city': 'Mumbai'}
+    {'orders.order_id': 105, 'orders.customer_id': 3, 'orders.item': 'Desk Lamp', 'orders.amount': 640.0, 'customers.id': 3, 'customers.name': 'Neha Iyer', 'customers.city': 'Goa'}
+    {'orders.order_id': 106, 'orders.customer_id': 1, 'orders.item': 'Mouse', 'orders.amount': 499.0, 'customers.id': 1, 'customers.name': 'Asha Rao', 'customers.city': 'Delhi'}
+
+LEFT JOIN keeps orders whose customer was deleted: 1 such row(s)

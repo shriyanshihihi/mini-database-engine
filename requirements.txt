@@ -1,0 +1,7 @@
+fastapi>=0.110
+uvicorn>=0.29
+psycopg2-binary>=2.9
+pydantic>=2.0
+httpx>=0.27      # needed by FastAPI TestClient (tests only)
+pytest>=8.0      # tests only
+matplotlib>=3.7  # only for docs/make_diagrams.py
